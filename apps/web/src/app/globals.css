@@ -1,0 +1,150 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/plus-jakarta-sans';
+
+/*
+ * Space design tokens — Soft Pastel + Premium Modern SaaS.
+ * Brand colours are overridable per company at runtime via --brand / --brand-soft.
+ */
+:root {
+  --brand: #6366e8;
+  --brand-soft: #eceefe;
+  --brand-ink: #3c3fb8;
+
+  --bg: #f6f3f0;
+  --bg-soft: #faf8f6;
+  --surface: #ffffff;
+  --surface-2: #fbfaf8;
+  --line: #ebe6e1;
+  --line-strong: #ddd6cf;
+  --ink: #26233a;
+  --ink-2: #4d4960;
+  --muted: #8b8698;
+  --muted-2: #b2adbb;
+
+  --lavender: #e9e4fb;
+  --lavender-ink: #6b5bc4;
+  --powder: #e3edfb;
+  --powder-ink: #3f6fc2;
+  --sage: #e2f0e6;
+  --sage-ink: #3c8a5c;
+  --blush: #fbe6ec;
+  --blush-ink: #c2577a;
+  --peach: #fdeadb;
+  --peach-ink: #c26a2c;
+  --butter: #fbf2d5;
+  --butter-ink: #a7801c;
+  --rose: #fbe3e3;
+  --rose-ink: #c24a4a;
+
+  --radius: 14px;
+  --shadow-sm: 0 1px 2px rgba(38, 35, 58, 0.04), 0 1px 1px rgba(38, 35, 58, 0.03);
+  --shadow-md: 0 6px 24px -8px rgba(38, 35, 58, 0.12), 0 2px 6px rgba(38, 35, 58, 0.04);
+  --shadow-lg: 0 18px 48px -16px rgba(38, 35, 58, 0.22), 0 4px 12px rgba(38, 35, 58, 0.06);
+}
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-lavender: var(--lavender);
+  --color-lavender-ink: var(--lavender-ink);
+  --color-powder: var(--powder);
+  --color-powder-ink: var(--powder-ink);
+  --color-sage: var(--sage);
+  --color-sage-ink: var(--sage-ink);
+  --color-blush: var(--blush);
+  --color-blush-ink: var(--blush-ink);
+  --color-peach: var(--peach);
+  --color-peach-ink: var(--peach-ink);
+  --color-butter: var(--butter);
+  --color-butter-ink: var(--butter-ink);
+  --color-rose: var(--rose);
+  --color-rose-ink: var(--rose-ink);
+  --shadow-soft: var(--shadow-md);
+  --shadow-float: var(--shadow-lg);
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  border-color: var(--line);
+}
+
+::selection {
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+}
+
+/* Calm, thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.focus-mode {
+  --shadow-md: 0 2px 10px -6px rgba(38, 35, 58, 0.08);
+}
+.focus-mode .decor {
+  opacity: 0.35;
+  transition: opacity 400ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-pop {
+  animation: pop-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade {
+  animation: fade-in 240ms ease-out;
+}

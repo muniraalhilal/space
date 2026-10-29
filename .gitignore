@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.next/
+.logs/
+.data/
+test-results/
+playwright-report/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+dump.rdb
+dist-web/
+.artifact/

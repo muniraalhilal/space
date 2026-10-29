@@ -1,0 +1,41 @@
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      # Public values: the database is protected by row-level security (apps/hosted/supabase/schema.sql).
+      VITE_SUPABASE_URL: https://syrskgxvaacxpeiwhmha.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_YA2rlEWgkSvvxq8gmd4AFw_tA4tTqKC
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:web --workspace=@space/hosted
+      - run: cp apps/hosted/dist-web/index.html apps/hosted/dist-web/404.html && touch apps/hosted/dist-web/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/hosted/dist-web
+      - id: deployment
+        uses: actions/deploy-pages@v4

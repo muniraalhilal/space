@@ -1,0 +1,17 @@
+{
+  "name": "space",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build:shared": "npm run build -w @space/shared",
+    "build": "npm run build -w @space/shared && npm run build -w @space/api && npm run build -w @space/web",
+    "dev:api": "npm run dev -w @space/api",
+    "dev:worker": "npm run worker -w @space/api",
+    "dev:web": "npm run dev -w @space/web",
+    "db:migrate": "npm run db:migrate -w @space/api",
+    "db:seed": "npm run db:seed -w @space/api",
+    "test": "npm test -w @space/shared && npm test -w @space/api",
+    "test:e2e": "npm run test:e2e -w @space/web"
+  }
+}

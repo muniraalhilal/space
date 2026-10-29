@@ -1,0 +1,19 @@
+@import '../../web/src/app/globals.css';
+@source '../../web/src';
+@source './';
+
+/* The artifact frame: size the app to the frame instead of the viewport. */
+html,
+body,
+#space-root {
+  height: 100%;
+}
+body {
+  background: var(--bg);
+}
+#space-root .h-screen {
+  height: 100%;
+}
+#space-root .min-h-screen {
+  min-height: 100%;
+}

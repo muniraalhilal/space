@@ -1,0 +1,63 @@
+# Local/production-like stack: Postgres, Redis, API, agent worker, web.
+#   cp .env.example .env   # set APP_ENCRYPTION_KEY (and an AI key if you want model-driven agents)
+#   docker compose up -d --build
+#   docker compose run --rm api node dist/db/migrate.js
+#   docker compose run --rm api node dist/db/seed/index.js   # optional demo data
+name: space
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: space
+      POSTGRES_PASSWORD: space
+      POSTGRES_DB: space
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U space"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redisdata:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+  api:
+    build: { context: ., target: api }
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://space:space@postgres:5432/space
+      REDIS_URL: redis://redis:6379
+      STORAGE_LOCAL_DIR: /data/files
+    volumes: [files:/data/files]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    ports: ["4000:4000"]
+  worker:
+    build: { context: ., target: api }
+    command: ["node", "dist/worker.js"]
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://space:space@postgres:5432/space
+      REDIS_URL: redis://redis:6379
+      STORAGE_LOCAL_DIR: /data/files
+    volumes: [files:/data/files]
+    depends_on: [api]
+  web:
+    build:
+      context: .
+      target: web
+      args: { API_INTERNAL_URL: "http://api:4000" }
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    depends_on: [api]
+    ports: ["3000:3000"]
+volumes:
+  pgdata: {}
+  redisdata: {}
+  files: {}

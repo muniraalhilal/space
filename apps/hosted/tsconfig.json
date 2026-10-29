@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": false,
+    "types": ["vite/client"],
+    "paths": {
+      "@/lib/api": ["./src/shims/api.ts"],
+      "@/lib/realtime": ["./src/shims/realtime.ts"],
+      "next/link": ["./src/shims/next-link.tsx"],
+      "next/navigation": ["./src/shims/next-navigation.ts"],
+      "next/dynamic": ["./src/shims/next-dynamic.tsx"],
+      "@space/shared": ["../../packages/shared/src/index.ts"],
+      "@/*": ["../web/src/*"]
+    }
+  },
+  "include": ["src"]
+}
