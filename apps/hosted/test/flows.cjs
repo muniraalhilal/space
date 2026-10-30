@@ -1,21 +1,18 @@
 // Functional checks of the in-page backend (same rules as apps/api tests), run against the built page.
-const { chromium } = require('/home/claude/space/apps/web/node_modules/playwright');
-const fs = require('fs');
-const path = require('path');
+const { chromium, seed: seedText, fake, hostedUrl } = require('./runtime.cjs');
 let failures = 0;
 const ok = (cond, msg) => {
   console.log(`${cond ? 'PASS' : 'FAIL'}  ${msg}`);
   if (!cond) failures++;
 };
 (async () => {
-  const seed = JSON.parse(fs.readFileSync('/home/claude/space/.artifact/seed/seed.json', 'utf8'));
-  const fake = fs.readFileSync(path.join(__dirname, 'fake-claude.js'), 'utf8');
+  const seed = JSON.parse(seedText);
   const browser = await chromium.launch();
   const page = await (await browser.newContext()).newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.addInitScript(`window.__SPACE_TEST__ = true; window.__SPACE_SEED__ = ${JSON.stringify(seed)};\n${fake}`);
-  await page.goto('file:///home/claude/space/apps/hosted/dist/index.html?still=1');
+  await page.goto(hostedUrl + '?still=1');
   await page.waitForFunction(() => !!window.__spaceApi, null, { timeout: 30000 });
   const call = (method, p, body) =>
     page.evaluate(

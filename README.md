@@ -62,3 +62,26 @@ honest failure without a provider), secret handling, audit logging and rate limi
 - [Architecture](docs/ARCHITECTURE.md)
 - [Deployment](docs/DEPLOYMENT.md)
 - [Verification report](docs/VERIFICATION.md) — what was tested, how, and what is not done yet
+
+## Hosted runtime checks
+
+The hosted single-page build is separate from the Next.js/API stack. After installing workspace
+packages, build it and install Playwright's browser from the repository root:
+
+```bash
+npm run build -w @space/hosted
+npm exec -w @space/web -- playwright install chromium
+node apps/hosted/test/flows.cjs
+node apps/hosted/test/smoke.cjs
+node apps/hosted/test/walk.cjs
+```
+
+These checks use the tracked `apps/hosted/src/web/demo-seed.json` fixture and the local
+`apps/hosted/test/fake-claude.js` runtime stand-in. They do not call a real model or need API keys.
+Screenshots go to the ignored `test-results/hosted/` directory. `smoke.cjs` accepts an optional
+output prefix; its parent directory must already exist.
+
+The Claude capability adapter and viewport metadata support the hosted target; the Anthropic/OpenAI
+adapters support model-driven API runs. Keep them and the test stand-in while those targets are
+supported. `apps/web/AGENTS.md` contains Next.js-generated development guidance and is retained;
+the file documents that `next dev` can regenerate its managed block.
